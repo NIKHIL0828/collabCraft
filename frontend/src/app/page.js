@@ -7,43 +7,77 @@ import {
   Text,
   VStack,
   HStack,
-  SimpleGrid,
   Icon,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { FiEdit3, FiUsers, FiZap, FiLock } from "react-icons/fi";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function HomePage() {
   const router = useRouter();
   const bgGradient = "linear(to-br, purple.50, blue.50)";
   const cardBg = useColorModeValue("white", "gray.800");
+  const dotColor = useColorModeValue("purple.500", "purple.300");
 
   const features = [
     {
       icon: FiEdit3,
-      title: "Rich Text Editor",
-      description: "Powerful editing tools with formatting options",
+      title: "Smart Text Editor",
+      description:
+        "Craft beautiful, well-formatted documents effortlessly with our intuitive rich text tools.",
     },
     {
       icon: FiUsers,
-      title: "Real-time Collaboration",
-      description: "Work together with your team simultaneously",
+      title: "Real-Time Teamwork",
+      description:
+        "Collaborate with your teammates instantly — every change appears in real-time.",
     },
     {
       icon: FiZap,
-      title: "AI-Powered Writing",
-      description: "Get smart suggestions and improvements with Gemini AI",
+      title: "AI Writing Assistant",
+      description:
+        "Boost your productivity with intelligent AI suggestions, rephrasing, and grammar help.",
     },
     {
       icon: FiLock,
-      title: "Secure & Private",
-      description: "Your documents are encrypted and protected",
+      title: "End-to-End Security",
+      description:
+        "Your documents are protected with advanced encryption and private access controls.",
     },
   ];
 
+  const sliderSettings = {
+    dots: true,
+    arrows: false,
+    infinite: true,
+    speed: 500,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
   return (
-    <Box minH="100vh" bgGradient={bgGradient}>
+    <Box minH="100vh" bgGradient={bgGradient} overflowX="hidden">
       {/* Hero Section */}
       <Container maxW="container.xl" pt={20} pb={16}>
         <VStack spacing={8} textAlign="center">
@@ -53,15 +87,15 @@ export default function HomePage() {
             bgClip="text"
             fontWeight="extrabold"
           >
-            CoEdit
+            CollabCraft
           </Heading>
           <Text
             fontSize={{ base: "xl", md: "2xl" }}
             color="gray.600"
             maxW="2xl"
           >
-            The smart collaborative document editor powered by AI. Write better,
-            work together and achieve more.
+            Collaborate. Create. Craft smarter.  
+            An AI-powered document editor built for seamless teamwork and powerful writing.
           </Text>
           <HStack spacing={4}>
             <Button
@@ -74,7 +108,7 @@ export default function HomePage() {
               }}
               transition="all 0.2s"
             >
-              Start For Free 
+              Get Started Free
             </Button>
             <Button
               size="lg"
@@ -82,7 +116,7 @@ export default function HomePage() {
               colorScheme="purple"
               onClick={() => router.push("/auth/login")}
             >
-              Sign In
+              Log In
             </Button>
           </HStack>
         </VStack>
@@ -92,30 +126,76 @@ export default function HomePage() {
       <Container maxW="container.xl" py={16}>
         <VStack spacing={12}>
           <Heading size="xl" textAlign="center">
-            Everything you need to write better
+            Powerful features built for modern creators
           </Heading>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={8} w="full">
-            {features.map((feature, index) => (
-              <Box
-                key={index}
-                bg={cardBg}
-                p={8}
-                borderRadius="xl"
-                boxShadow="lg"
-                _hover={{
-                  transform: "translateY(-4px)",
-                  boxShadow: "xl",
-                }}
-                transition="all 0.3s"
-              >
-                <VStack spacing={4} align="start">
-                  <Icon as={feature.icon} w={10} h={10} color="purple.500" />
-                  <Heading size="md">{feature.title}</Heading>
-                  <Text color="gray.600">{feature.description}</Text>
-                </VStack>
-              </Box>
-            ))}
-          </SimpleGrid>
+
+          <Box
+            w="full"
+            px={{ base: 4, md: 12 }}
+            sx={{
+              ".slick-dots": {
+                bottom: "-40px",
+              },
+              ".slick-dots li button:before": {
+                fontSize: "12px",
+                color: dotColor,
+                opacity: 0.25,
+                transition: "opacity 0.3s",
+              },
+              ".slick-dots li.slick-active button:before": {
+                color: dotColor,
+                opacity: 1,
+              },
+              ".slick-track": {
+                display: "flex !important",
+              },
+              ".slick-slide": {
+                height: "inherit !important",
+                display: "flex !important",
+              },
+              ".slick-slide > div": {
+                height: "100%",
+                width: "100%",
+                display: "flex",
+              },
+            }}
+          >
+            <Slider {...sliderSettings}>
+              {features.map((feature, index) => (
+                <Box key={index} px={4} py={4} h="full" flex={1}>
+                  <Box
+                    bg={cardBg}
+                    p={{ base: 8, md: 10 }}
+                    borderRadius="2xl"
+                    boxShadow="lg"
+                    h="full"
+                    minH={{ base: "300px", md: "350px" }}
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
+                    _hover={{
+                      transform: "translateY(-4px)",
+                      boxShadow: "xl",
+                    }}
+                    transition="all 0.3s"
+                  >
+                    <VStack spacing={5} align="start">
+                      <Icon
+                        as={feature.icon}
+                        w={12}
+                        h={12}
+                        color="purple.500"
+                      />
+                      <Heading size="lg">{feature.title}</Heading>
+                      <Text fontSize="lg" color="gray.600">
+                        {feature.description}
+                      </Text>
+                    </VStack>
+                  </Box>
+                </Box>
+              ))}
+            </Slider>
+          </Box>
         </VStack>
       </Container>
 
@@ -124,10 +204,10 @@ export default function HomePage() {
         <Box bg="purple.600" borderRadius="2xl" p={12} textAlign="center">
           <VStack spacing={6}>
             <Heading size="xl" color="white">
-              Ready to transform your writing?
+              Ready to craft your next great document?
             </Heading>
             <Text fontSize="lg" color="purple.100" maxW="2xl">
-              Join thousands of writers using CoEdit to create amazing documents
+              Join creators and teams using <b>CollabCraft</b> to write, collaborate, and innovate — all in one place.
             </Text>
             <Button
               size="lg"
